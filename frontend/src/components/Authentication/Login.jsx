@@ -1,9 +1,8 @@
-import React from 'react'
 import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -11,18 +10,35 @@ const Login = () => {
 
   const [Email,setEmail] = useState("");
   const[Password,setPassword] = useState("");
+  const [userData, setUserData] = useState("");
   const[show,setShow] = useState(false);
   const[loading,setLoading] = useState(false);
   const navigate = useNavigate();
 
+    useEffect(() => {
+      const data = localStorage.getItem("tokenJWT");
+      if (data) {
+        navigate("/chats");
+      }
+    }, []);
 
   function handleClick(){
     setShow(!show);
   }
 
-  function submitHandler(){
+ async function submitHandler(){
         loadingHandler();
+      const {data} = await axios.post('http://localhost:4000/api/login',{
+        email:Email,
+        password:Password
+      })
+      // console.log(data);
+      if(data && data.res.token){
+      loadingHandler();
+      setUserData(data.res);
+      localStorage.setItem("tokenJWT", data.res.token);
       navigate("/chats");
+      }
 
   }
 function loadingHandler(){
@@ -31,7 +47,7 @@ function loadingHandler(){
 
   return (
     <VStack spacing="10px">
-      <FormControl id="email" isRequired>
+      <FormControl id="LoginEmail" isRequired>
         <FormLabel>Email</FormLabel>
         <Input
           type="email"
@@ -40,7 +56,7 @@ function loadingHandler(){
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
-      <FormControl id="password" isRequired>
+      <FormControl id="LoginPassword" isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup size="md">
           <Input

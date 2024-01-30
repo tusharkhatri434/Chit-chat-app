@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const bcrypt = require("bcrypt");
 const userSchema = mongoose.Schema(
   {
     name: { type: "String", required: true },
@@ -19,6 +19,20 @@ const userSchema = mongoose.Schema(
   },
   { timestaps: true }
 );
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified) {
+    next();
+  }
+
+  const salt = await bcrypt.genSaltSync(10);
+  this.password = await bcrypt.hashSync(this.password, salt);
+});
 
 const User = mongoose.model("User", userSchema);
 
