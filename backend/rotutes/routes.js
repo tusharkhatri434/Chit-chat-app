@@ -4,24 +4,26 @@ const chats = require("../data/data");
 const {
   createUser,
   loginUser,
-  getUserDetails,
+  getAllUser,
 } = require("../Controllers/userControler");
+const tokenVerify = require('../middlewares/tokenVerify');
+const { getChatOne, createGroup, getAllChats, removeFrom, addTo, changeGroupName } = require('../Controllers/chatController');
 
 routes.get("/", (req, res) => {
   res.send("App is running");
 });
 
-routes.get("/api/chats", (req, res) => {
-  res.send(chats);
-});
-
-routes.get("/api/chats/:id", (req, res) => {
-  const singleChat = chats.find((c) => c._id === req.params.id);
-  res.send(singleChat);
-});
-
 routes.post("/api/signup",createUser);
 routes.post("/api/login", loginUser);
-routes.post("/api/token-verify",getUserDetails)
+routes.get("/api/token-verify", tokenVerify);
+routes.get("/api/getUsers",tokenVerify,getAllUser);
+
+// Chats APIs ---
+routes.post("/api/chat", getChatOne);
+routes.get("/api/chats", getAllChats);
+routes.post("/api/group", createGroup);
+routes.put("/api/chat/rename", changeGroupName);
+routes.put("/api/chat/add", addTo);
+routes.put("/api/chat/remove", removeFrom);
 
 module.exports = routes;

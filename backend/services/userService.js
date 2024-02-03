@@ -42,17 +42,25 @@ class userService {
     }
   }
 
-  async verifyToken(token){
-      try {
-         const {id} = getTokenId(token);
-         if(id){
-           const res = await this.UserRepository.findById(id);
-            console.log(res);
-            return res;
-        }
-        } catch (error) {
-        console.log(error);
+  async verifyToken(token) {
+    try {
+      const { id } = getTokenId(token);
+      if (id) {
+        const res = await this.UserRepository.findById(id);
+        return res;
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getAll(data) {
+    try {
+      const res = await this.UserRepository.findAll(data);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
