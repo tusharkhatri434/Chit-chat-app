@@ -7,6 +7,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
+import { setUserDetails } from '../../store/userSlice';
+import { useDispatch } from 'react-redux';
 
 const SignUp = () => {
  
@@ -17,12 +19,13 @@ const SignUp = () => {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const[userData,setUserData] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
     function handleClick() {
       setShow(!show);
     }
-
+ 
     async function submitHandler() {
       loadingHandler();
       const {data} = await axios.post('http://localhost:4000/api/signup',{
@@ -34,7 +37,8 @@ const SignUp = () => {
       if(data && data.res.token){
       loadingHandler();
       setUserData(data.res);
-      localStorage.setItem("tokenJWT", data.res.token);
+      // localStorage.setItem("tokenJWT", data.res.token);
+      dispatch(setUserDetails(data.res));
       navigate("/chats");
       }
 

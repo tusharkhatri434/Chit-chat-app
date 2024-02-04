@@ -9,13 +9,13 @@ const Chats = () => {
   } 
 
   useEffect(()=>{
-    const token = localStorage.getItem('tokentJWT');
-    getData(token);
+    // const token = localStorage.getItem('tokentJWT');
+    // getData(token);
   },[])
 
   return (
     <div>
-      
+      chats page 
     </div>
   )
 }

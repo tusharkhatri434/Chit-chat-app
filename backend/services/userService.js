@@ -15,6 +15,7 @@ class userService {
         user: user._id,
         name: user.name,
         email: user.email,
+        pic:user.pic,
         token: generateToken(user._id),
       };
       return response;
@@ -34,6 +35,7 @@ class userService {
         user: user._id,
         name: user.name,
         email: user.email,
+        pic:user.pic,
         token: generateToken(user._id),
       };
       return user && res === true ? response : notFound;

@@ -6,6 +6,8 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../../store/userSlice";
 const Login = () => {
 
   const [Email,setEmail] = useState("");
@@ -13,10 +15,12 @@ const Login = () => {
   const [userData, setUserData] = useState("");
   const[show,setShow] = useState(false);
   const[loading,setLoading] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
     useEffect(() => {
-      const data = localStorage.getItem("tokenJWT");
+      // const data = localStorage.getItem("tokenJWT");
+      const data = "";
       if (data) {
         navigate("/chats");
       }
@@ -36,7 +40,8 @@ const Login = () => {
       if(data && data.res.token){
       loadingHandler();
       setUserData(data.res);
-      localStorage.setItem("tokenJWT", data.res.token);
+      // localStorage.setItem("tokenJWT", data.res.token);
+      dispatch(setUserDetails(data.res));
       navigate("/chats");
       }
 
